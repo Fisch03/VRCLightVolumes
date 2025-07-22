@@ -27,11 +27,28 @@ namespace VRCLightVolumes {
         public bool SmoothingEnabled = true;
         [Tooltip("Value from 0 to 1 that defines how much smoothing should be applied. Zero usually applies just a little bit of smoothing. One smoothes out almost all the fast blinks and makes intensity changing very slow")]
         [Range(0, 1)] public float Smoothing = 0.25f;
+
+        [Tooltip("Value added to intensity at AudioLink minimum")]
+        public float MinimumAdd = 0f;
+        [Tooltip("Value added to intensity at AudioLink maximum")]
+        public float MaximumAdd = 0f;
+
+        [Tooltip("Value multiplied with intensity at AudioLink minimum")]
+        public float MinimumMultiply = 1f;
+        [Tooltip("Value multiplied with intensity at AudioLink maximum")]
+        public float MaximumMultiply = 1f;
+
         [Space]
         [Tooltip("Auto uses Theme Colors 0, 1, 2, 3 for Bass, LowMid, HighMid, Treble. Override Color allows you to set the static color value")]
-        public AudioLinkColor ColorMode = AudioLinkColor.Auto;
+        public AudioLinkColor ColorMode = AudioLinkColor.Automatic;
         [Tooltip("Color that will be used when Override Color is enabled")]
         [ColorUsage(showAlpha: false)] public Color Color = Color.white;
+
+        [Tooltip("Enable to set the base color of the material to the light color")]
+        public bool SetBaseColor = false;
+        [Tooltip("Brightness multiplier of the materials that should change color based on AudioLink. Intensity for Light Volumes and Point Light Volumes should be setup in their components")]
+        public float MaterialsIntensity = 2f;
+
         [Space]
         [Tooltip("List of the Light Volumes that should be affected by AudioLink")]
         public LightVolumeInstance[] TargetLightVolumes;
@@ -39,61 +56,139 @@ namespace VRCLightVolumes {
         public PointLightVolumeInstance[] TargetPointLightVolumes;
         [Tooltip("List of the Mesh Renderers that has materials that should change color based on AudioLink")]
         public Renderer[] TargetMeshRenderers;
-        [Tooltip("Brightness multiplier of the materials that should change color based on AudioLink. Intensity for Light Volumes and Point Light Volumes should be setup in their components")]
-        public float MaterialsIntensity = 2;
 
+        // shader property IDs
+        private int _colorID;
         private int _emissionColorID;
-        private MaterialPropertyBlock _block;
+        private int _emissionStrengthID;
 
-        private Color _prevColor;
+        private MaterialPropertyBlock _block;
+        private float _prevData = 0f;
+
+        // storage for the base intensity values
+        private float[] _pvBaseIntensity;
+        private float[] _vBaseIntensity;
+        private float[] _mBaseIntensity;
 
         private void InitIDs() {
+            _colorID = VRCShader.PropertyToID("_Color");
             _emissionColorID = VRCShader.PropertyToID("_EmissionColor");
+            _emissionStrengthID = VRCShader.PropertyToID("_EmissionStrength");
         }
 
         private void Start() {
-            _block = new MaterialPropertyBlock();
             InitIDs();
-            _prevColor = Color.black;
+            _block = new MaterialPropertyBlock();
+            Color _color;
+
             if (AudioLink != null) {
                 AudioLink.EnableReadback();
+            }
+
+            // find base intensity values
+            int _count = TargetLightVolumes.Length;
+            _vBaseIntensity = new float[_count];
+            for (int i = 0; i < TargetLightVolumes.Length; i++) {
+                _vBaseIntensity[i] = TargetLightVolumes[i].Intensity;
+            }
+
+            _count = TargetPointLightVolumes.Length;
+            _pvBaseIntensity = new float[_count];
+            for (int i = 0; i < TargetPointLightVolumes.Length; i++) {
+                _pvBaseIntensity[i] = TargetPointLightVolumes[i].Intensity;
+            }
+
+            _count = TargetMeshRenderers.Length;
+            _mBaseIntensity = new float[_count];
+            for (int i = 0; i < TargetMeshRenderers.Length; i++) {
+                _mBaseIntensity[i] = TargetMeshRenderers[i].material.GetFloat(_emissionStrengthID);
             }
         }
 
         private void Update() {
-
             int band = (int)AudioBand;
-            Color color;
 
-            if (ColorMode == AudioLinkColor.OverrideColor) {
-                color = Vector4.Scale(AudioLink.GetDataAtPixel(Delay, band), Color);
-            } else if(ColorMode == AudioLinkColor.Auto) {
-                color = Vector4.Scale(AudioLink.GetDataAtPixel(Delay, band), AudioLink.GetDataAtPixel(band, 23));
-            } else {
-                color = Vector4.Scale(AudioLink.GetDataAtPixel(Delay, band), AudioLink.GetDataAtPixel((int)ColorMode, 23));
+            // choose color
+            Color _color = Color.black;
+            switch (ColorMode) {
+                case AudioLinkColor.NoChange:
+                    break;
+                case AudioLinkColor.Automatic:
+                    _color = AudioLink.GetDataAtPixel(band, 23);
+                    break;
+                case AudioLinkColor.OverrideColor:
+                    _color = Color;
+                    break;
+                default:
+                    _color = AudioLink.GetDataAtPixel((int) ColorMode, 23);
+                    break;
             }
 
-            if (SmoothingEnabled) {
-                float diff = ColorDifference(color, _prevColor); // Difference between prev and current color
-                float smoothing = Time.deltaTime / Mathf.Lerp(Mathf.Lerp(0.25f, 1f, Smoothing), Mathf.Lerp(1e-05f, 0.1f, Smoothing), Mathf.Pow(diff * 1.5f, 0.1f)); // Smoothing speed depends on the color difference
-                _prevColor = Color.Lerp(_prevColor, color, smoothing); // Actually smoothing colors
-            } else {
-                _prevColor = color;
+            float alData = SampleALData(Delay, band);
+
+            int _count = TargetLightVolumes.Length;
+            for (int i = 0; i < _count; i++) {
+                TargetLightVolumes[i].Intensity =
+                    ApplyALFactors(_vBaseIntensity[i], alData);
+
+                if (ColorMode != AudioLinkColor.NoChange) {
+                   TargetPointLightVolumes[i].Color = _color;
+                }
             }
 
-            for (int i = 0; i < TargetLightVolumes.Length; i++) {
-                TargetLightVolumes[i].Color = _prevColor;
-            }
-            for (int i = 0; i < TargetPointLightVolumes.Length; i++) {
-                TargetPointLightVolumes[i].Color = _prevColor;
+            _count = TargetPointLightVolumes.Length;
+            for (int i = 0; i < _count; i++) {
                 TargetPointLightVolumes[i].IsRangeDirty = true;
+                TargetPointLightVolumes[i].Intensity =
+                    ApplyALFactors(_pvBaseIntensity[i], alData);
+
+                if (ColorMode != AudioLinkColor.NoChange) {
+                   TargetPointLightVolumes[i].Color = _color;
+                }
             }
-            _block.SetColor(_emissionColorID, _prevColor * MaterialsIntensity);
-            for (int i = 0; i < TargetMeshRenderers.Length; i++) {
+
+            _count = TargetMeshRenderers.Length;
+            for (int i = 0; i < _count; i++) {
+                TargetMeshRenderers[i].GetPropertyBlock(_block, 0);
+
+                if (ColorMode != AudioLinkColor.NoChange) {
+                    _block.SetColor(_emissionColorID, _color);
+                    if (SetBaseColor) {
+                        _block.SetColor(_colorID, _color);
+                    }
+                }
+
+                _block.SetFloat(_emissionStrengthID, 
+                    ApplyALFactors(_mBaseIntensity[i] * MaterialsIntensity, alData));
+
                 TargetMeshRenderers[i].SetPropertyBlock(_block);
             }
-
         }
+
+        private float ApplyALFactors(float input, float alData) {
+            float output = input;
+            output += Mathf.Lerp(MinimumAdd, MaximumAdd, alData);
+            output *= Mathf.Lerp(MinimumMultiply, MaximumMultiply, alData);
+            return output;
+        }
+
+        private float SampleALData(int delay, int band) {
+            // sample the audiolink band data from ALPASS_AUDIOLINK
+            // when delay is 0 or ALPASS_AUDIOLINKHISTORY when > 0
+            float alData = AudioLink.GetDataAtPixel(delay, band).x;
+
+            if (SmoothingEnabled) {
+                float diff = Mathf.Abs(Mathf.Abs(alData) - Mathf.Abs(_prevData));
+
+                // Smoothing speed depends on the color difference
+                float smoothing = Time.deltaTime / Mathf.Lerp(Mathf.Lerp(0.25f, 1f, Smoothing), Mathf.Lerp(1e-05f, 0.1f, Smoothing), Mathf.Pow(diff * 1.5f, 0.1f));
+
+                // Actually smoothing the value
+                _prevData = Mathf.Lerp(_prevData, alData, smoothing);
+            }
+            return alData;
+        }
+
 
         private float ColorDifference(Color colorA, Color colorB) {
             float rmean = (colorA.r + colorB.r) * 0.5f;
@@ -120,12 +215,13 @@ namespace VRCLightVolumes {
     }
 
     public enum AudioLinkColor {
-        Auto = -1,
+        NoChange = -1,
         ThemeColor0 = 0,
         ThemeColor1 = 1,
         ThemeColor2 = 2,
         ThemeColor3 = 3,
-        OverrideColor = 4
+        OverrideColor = 4,
+        Automatic = 5
     }
 
 }
