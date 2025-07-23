@@ -40,7 +40,7 @@ namespace VRCLightVolumes {
 
         [Space]
         [Tooltip("Auto uses Theme Colors 0, 1, 2, 3 for Bass, LowMid, HighMid, Treble. Override Color allows you to set the static color value")]
-        public AudioLinkColor ColorMode = AudioLinkColor.Automatic;
+        public AudioLinkColor ColorMode = AudioLinkColor.Auto;
         [Tooltip("Color that will be used when Override Color is enabled")]
         [ColorUsage(showAlpha: false)] public Color Color = Color.white;
 
@@ -77,8 +77,8 @@ namespace VRCLightVolumes {
         }
 
         private void Start() {
-            InitIDs();
             _block = new MaterialPropertyBlock();
+            InitIDs();
             Color _color;
 
             if (AudioLink != null) {
@@ -215,13 +215,13 @@ namespace VRCLightVolumes {
     }
 
     public enum AudioLinkColor {
-        NoChange = -1,
+        Auto = -1,
         ThemeColor0 = 0,
         ThemeColor1 = 1,
         ThemeColor2 = 2,
         ThemeColor3 = 3,
         OverrideColor = 4,
-        Automatic = 5
+        NoChange = 5
     }
 
 }
