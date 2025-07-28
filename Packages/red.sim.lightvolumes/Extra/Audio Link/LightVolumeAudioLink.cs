@@ -113,8 +113,10 @@ namespace VRCLightVolumes {
             switch (ColorMode) {
                 case AudioLinkColor.NoChange:
                     break;
-                case AudioLinkColor.Automatic:
-                    _color = AudioLink.GetDataAtPixel(band, 23);
+                case AudioLinkColor.Auto:
+                    // wrap this around because of the size mismatch between number
+                    // of bands and number of colors
+                    _color = AudioLink.GetDataAtPixel(band % 4, 23);
                     break;
                 case AudioLinkColor.OverrideColor:
                     _color = Color;
@@ -158,7 +160,7 @@ namespace VRCLightVolumes {
                     }
                 }
 
-                _block.SetFloat(_emissionStrengthID, 
+                _block.SetFloat(_emissionStrengthID,
                     ApplyALFactors(_mBaseIntensity[i] * MaterialsIntensity, alData));
 
                 TargetMeshRenderers[i].SetPropertyBlock(_block);
@@ -173,9 +175,18 @@ namespace VRCLightVolumes {
         }
 
         private float SampleALData(int delay, int band) {
-            // sample the audiolink band data from ALPASS_AUDIOLINK
-            // when delay is 0 or ALPASS_AUDIOLINKHISTORY when > 0
-            float alData = AudioLink.GetDataAtPixel(delay, band).x;
+            float alData = 0f;
+
+            // sample from ALPASS_GENERALVU + (8, 0) to get volume (RMS Left)
+            // note that we don't get delay here.
+            if (band == (int) AudioLinkBand.Volume) {
+                alData = AudioLink.GetDataAtPixel(8, 22).x;
+            }
+            else {
+                // sample the audiolink band data from ALPASS_AUDIOLINK
+                // when delay is 0 or ALPASS_AUDIOLINKHISTORY when > 0
+                alData = AudioLink.GetDataAtPixel(delay, band).x;
+            }
 
             if (SmoothingEnabled) {
                 float diff = Mathf.Abs(Mathf.Abs(alData) - Mathf.Abs(_prevData));
@@ -211,7 +222,8 @@ namespace VRCLightVolumes {
         Bass = 0,
         LowMid = 1,
         HighMid = 2,
-        Treble = 3
+        Treble = 3,
+        Volume = 4
     }
 
     public enum AudioLinkColor {
