@@ -23,7 +23,7 @@
 | [Moriohs Toon Shader](https://gitlab.com/xMorioh/moriohs-toon-shader) | Toon/Master Shader that not just correctly respects the entirety of Unity's Lighting System in a NPR Workflow but would also include several PBR approaches for different features. |     v.2.1.0     |
 | [RealToon (Pro Anime/Toon Shader)](https://assetstore.unity.com/packages/vfx/shaders/realtoon-pro-anime-toon-shader-65518?aid=1100lwff7) | An Pro/Advance Anime/Toon Shader to make your characters & objects to look as close to real Anime/Cartoon. Other Stylized look are also possible. (For Games, Film/Animations & Illustrations/Arts) |    v.5.0.13     |
 | [Quantum Shader](https://github.com/SaphiBlue/quantumshader) | A shader pack made with ASE (Amplify Shader Editor) with Unity like PBR options and custom audiolink. | Jul 24, 2025 |
-| [Warren's Fast Fur Shader](https://warrenwolfy.gumroad.com/l/atntv) | A fur shader that supports Light Volumes. |        v5.1.0        |
+| [Warren's Fast Fur Shader](https://warrenwolfy.gumroad.com/l/atntv) | A heavily speed-optimized fur shader. Supports both per-pixel and per-vertex Light Volumes, with anisotropic highlighting for the hairs. |        v5.1.0        |
 
 
 ## Light Volumes v.1.0.0 compatible
