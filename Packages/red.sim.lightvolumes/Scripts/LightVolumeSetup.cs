@@ -61,6 +61,8 @@ namespace VRCLightVolumes {
         [Header("Debug")]
         [Tooltip("Removes all Light Volume scripts in play mode, except Udon components. Useful for testing in a clean setup, just like in VRChat. For example, Auto Update Volumes and Dynamic Light Volumes will work just like in VRChat.")]
         public bool DestroyInPlayMode = false;
+        [Tooltip("Downscales each light volume. Useful to make a lower atlas resolution for mobile platforms or to increase overall sharpness and decrease aliasing.")]
+        public Downscale DownscaleVolumes = Downscale.None;
 
         [SerializeField] public List<LightVolumeData> LightVolumeDataList = new List<LightVolumeData>();
 
@@ -479,7 +481,7 @@ namespace VRCLightVolumes {
 
                 _generateAtlasCoroutine = null;
 
-            }), this);
+            }, (int)DownscaleVolumes), this);
 
         }
 
@@ -724,6 +726,13 @@ namespace VRCLightVolumes {
             _512x512 = 512,
             _1024x1024 = 1024,
             _2048x2048 = 2048
+        }
+
+        public enum Downscale {
+            None = 0,
+            x2 = 1,
+            x4 = 2,
+            x8 = 3
         }
 
     }

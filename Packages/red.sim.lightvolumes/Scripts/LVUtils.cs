@@ -321,5 +321,70 @@ namespace VRCLightVolumes {
 #endif
         }
 
+        public static Texture3D DownscaleTexture3D(Texture3D source) {
+
+            if (source == null) {
+                return null;
+            }
+
+            int newWidth = Mathf.Max(1, source.width / 2);
+            int newHeight = Mathf.Max(1, source.height / 2);
+            int newDepth = Mathf.Max(1, source.depth / 2);
+
+            Texture3D result = new Texture3D(newWidth, newHeight, newDepth, source.format, source.mipmapCount > 1);
+            result.wrapMode = source.wrapMode;
+            result.filterMode = FilterMode.Trilinear;
+            result.anisoLevel = source.anisoLevel;
+
+            Color[] sourcePixels = source.GetPixels();
+            Color[] resultPixels = new Color[newWidth * newHeight * newDepth];
+
+            int sourceWidth = source.width;
+            int sourceHeight = source.height;
+            int sourceDepth = source.depth;
+
+            // Perform trilinear filtering
+            for (int z = 0; z < newDepth; z++) {
+                for (int y = 0; y < newHeight; y++) {
+                    for (int x = 0; x < newWidth; x++) {
+
+                        // Sample 8 pixels from source texture
+                        int sx = x * 2;
+                        int sy = y * 2;
+                        int sz = z * 2;
+
+                        // Clamp to bounds
+                        int sx1 = Mathf.Min(sx + 1, sourceWidth - 1);
+                        int sy1 = Mathf.Min(sy + 1, sourceHeight - 1);
+                        int sz1 = Mathf.Min(sz + 1, sourceDepth - 1);
+
+                        // Get 8 corner samples
+                        Color c000 = sourcePixels[sx + sy * sourceWidth + sz * sourceWidth * sourceHeight];
+                        Color c100 = sourcePixels[sx1 + sy * sourceWidth + sz * sourceWidth * sourceHeight];
+                        Color c010 = sourcePixels[sx + sy1 * sourceWidth + sz * sourceWidth * sourceHeight];
+                        Color c110 = sourcePixels[sx1 + sy1 * sourceWidth + sz * sourceWidth * sourceHeight];
+                        Color c001 = sourcePixels[sx + sy * sourceWidth + sz1 * sourceWidth * sourceHeight];
+                        Color c101 = sourcePixels[sx1 + sy * sourceWidth + sz1 * sourceWidth * sourceHeight];
+                        Color c011 = sourcePixels[sx + sy1 * sourceWidth + sz1 * sourceWidth * sourceHeight];
+                        Color c111 = sourcePixels[sx1 + sy1 * sourceWidth + sz1 * sourceWidth * sourceHeight];
+
+                        // Average all 8 samples
+                        Color averaged = (c000 + c100 + c010 + c110 + c001 + c101 + c011 + c111) * 0.125f;
+
+                        int resultIndex = x + y * newWidth + z * newWidth * newHeight;
+                        resultPixels[resultIndex] = averaged;
+
+                    }
+                }
+            }
+
+            result.SetPixels(resultPixels);
+            result.Apply();
+
+            return result;
+
+        }
+
     }
+
 }

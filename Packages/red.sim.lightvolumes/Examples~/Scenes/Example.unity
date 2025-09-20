@@ -187,7 +187,7 @@ MonoBehaviour:
   BoundsUvwMin0: {x: 0.014285714, y: 0.5, z: 0.76256984, w: 0.2857143}
   BoundsUvwMin1: {x: 0.014285714, y: 0.65789473, z: 0.9357542, w: 0.31578946}
   BoundsUvwMin2: {x: 0.014285714, y: 0.5, z: 0.82402235, w: 0.055865884}
-  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 0}
+  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 1}
   BoundsUvwMax0: {x: 0.3, y: 0.81578946, z: 0.8184357, w: 0}
   BoundsUvwMax1: {x: 0.3, y: 0.9736842, z: 0.9916201, w: 0}
   BoundsUvwMax2: {x: 0.3, y: 0.81578946, z: 0.8798883, w: 0}
@@ -243,6 +243,7 @@ MonoBehaviour:
   Highlights: 0
   Bake: 1
   PointLightShadows: 1
+  ShadowsScale: 1
   BlurShadows: 1
   AdaptiveResolution: 1
   VoxelsPerUnit: 2
@@ -339,7 +340,7 @@ MonoBehaviour:
   BoundsUvwMin0: {x: 0.78571427, y: 0.5, z: 0.9357542, w: 0.11428571}
   BoundsUvwMin1: {x: 0.78571427, y: 0.5, z: 0.76256984, w: 0.2631579}
   BoundsUvwMin2: {x: 0.78571427, y: 0.02631579, z: 0.9357542, w: 0.061452508}
-  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 0}
+  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 1}
   BoundsUvwMax0: {x: 0.9, y: 0.7631579, z: 0.9972067, w: 0}
   BoundsUvwMax1: {x: 0.9, y: 0.7631579, z: 0.82402235, w: 0}
   BoundsUvwMax2: {x: 0.9, y: 0.28947368, z: 0.9972067, w: 0}
@@ -395,6 +396,7 @@ MonoBehaviour:
   Highlights: 0
   Bake: 1
   PointLightShadows: 1
+  ShadowsScale: 1
   BlurShadows: 1
   AdaptiveResolution: 1
   VoxelsPerUnit: 2
@@ -539,8 +541,7 @@ MonoBehaviour:
   - 4
   - 5
   - 0
-  PointLightVolumes:
-  - {fileID: 0}
+  PointLightVolumes: []
   Resolution: 512
   Format: 17
   LightsBrightnessCutoff: 0.35
@@ -555,6 +556,7 @@ MonoBehaviour:
   AutoUpdateVolumes: 1
   AdditiveMaxOverdraw: 4
   DestroyInPlayMode: 1
+  DownscaleVolumes: 0
   LightVolumeDataList:
   - Weight: 0
     LightVolumeInstance: {fileID: 42751781}
@@ -596,6 +598,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 446951797}
   LightVolumeAtlas: {fileID: 11700000, guid: 7e660c03267fa1348ac5d7b4b3d85030, type: 2}
+  LightVolumeAtlasBase: {fileID: 11700000, guid: 7e660c03267fa1348ac5d7b4b3d85030, type: 2}
+  AtlasPostProcessors: []
   LightProbesBlending: 1
   SharpBounds: 1
   AutoUpdateVolumes: 1
@@ -609,8 +613,7 @@ MonoBehaviour:
   - {fileID: 110763775}
   - {fileID: 1819868269}
   - {fileID: 42751781}
-  PointLightVolumeInstances:
-  - {fileID: 0}
+  PointLightVolumeInstances: []
   CustomTextures: {fileID: 0}
   CubemapsCount: 0
   IsRangeDirty: 0
@@ -766,27 +769,79 @@ PrefabInstance:
       objectReference: {fileID: 446951793}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: Color.b
-      value: 0.22352941
+      value: 0.2235294
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: Color.g
-      value: 0.56078434
+      value: 0.56268185
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: IsInitialized
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMax0.x
+      value: 0.98571426
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMax0.y
+      value: 0.9736842
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: BoundsUvwMax0.z
       value: 0.38826814
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMax1.x
+      value: 0.98571426
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMax1.y
+      value: 0.9736842
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: BoundsUvwMax1.z
       value: 0.5837989
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMax2.x
+      value: 0.98571426
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMax2.y
+      value: 0.9736842
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: BoundsUvwMax2.z
       value: 0.19273743
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin0.w
+      value: 0.9714285
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin0.x
+      value: 0.014285714
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin0.y
+      value: 0.02631579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: BoundsUvwMin0.z
       value: 0.19832402
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin1.w
+      value: 0.9473684
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin1.x
+      value: 0.014285714
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin1.y
+      value: 0.02631579
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: BoundsUvwMin1.z
@@ -797,8 +852,36 @@ PrefabInstance:
       value: 0.18994412
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin2.x
+      value: 0.014285714
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMin2.y
+      value: 0.02631579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: BoundsUvwMin2.z
       value: 0.002793296
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: LightVolumeManager
+      value: 
+      objectReference: {fileID: 446951794}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: BoundsUvwMinOcclusion.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: InvLocalEdgeSmoothing.x
+      value: 31.40819
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: InvLocalEdgeSmoothing.y
+      value: 16.563108
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
+      propertyPath: InvLocalEdgeSmoothing.z
+      value: 31.183752
       objectReference: {fileID: 0}
     - target: {fileID: 7656743471049202641, guid: 65271766caa0f64439c02e090bf0bf86, type: 3}
       propertyPath: serializationData.Prefab
@@ -2432,7 +2515,7 @@ MonoBehaviour:
   BoundsUvwMin0: {x: 0.014285714, y: 0.02631579, z: 0.96927375, w: 0.35714287}
   BoundsUvwMin1: {x: 0.4, y: 0.02631579, z: 0.9357542, w: 0.57894737}
   BoundsUvwMin2: {x: 0.014285714, y: 0.02631579, z: 0.9357542, w: 0.027932942}
-  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 0}
+  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 1}
   BoundsUvwMax0: {x: 0.37142858, y: 0.6052632, z: 0.9972067, w: 0}
   BoundsUvwMax1: {x: 0.75714284, y: 0.6052632, z: 0.9636871, w: 0}
   BoundsUvwMax2: {x: 0.37142858, y: 0.6052632, z: 0.9636871, w: 0}
@@ -2503,6 +2586,7 @@ MonoBehaviour:
   Highlights: 0
   Bake: 1
   PointLightShadows: 1
+  ShadowsScale: 1
   BlurShadows: 1
   AdaptiveResolution: 1
   VoxelsPerUnit: 10
@@ -2741,7 +2825,7 @@ MonoBehaviour:
   BoundsUvwMin0: {x: 0.014285714, y: 0.02631579, z: 0.58938545, w: 0.8571428}
   BoundsUvwMin1: {x: 0.014285714, y: 0.5, z: 0.58938545, w: 0.42105263}
   BoundsUvwMin2: {x: 0.014285714, y: 0.02631579, z: 0.76256984, w: 0.16759777}
-  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 0}
+  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 1}
   BoundsUvwMax0: {x: 0.87142855, y: 0.4473684, z: 0.7569832, w: 0}
   BoundsUvwMax1: {x: 0.87142855, y: 0.92105263, z: 0.7569832, w: 0}
   BoundsUvwMax2: {x: 0.87142855, y: 0.4473684, z: 0.9301676, w: 0}
@@ -2797,6 +2881,7 @@ MonoBehaviour:
   Highlights: 0
   Bake: 1
   PointLightShadows: 1
+  ShadowsScale: 1
   BlurShadows: 1
   AdaptiveResolution: 1
   VoxelsPerUnit: 6
@@ -2893,7 +2978,7 @@ MonoBehaviour:
   BoundsUvwMin0: {x: 0.4, y: 0.5, z: 0.88547486, w: 0.22857144}
   BoundsUvwMin1: {x: 0.4, y: 0.65789473, z: 0.9357542, w: 0.21052629}
   BoundsUvwMin2: {x: 0.4, y: 0.5, z: 0.82402235, w: 0.044692755}
-  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 0}
+  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 1}
   BoundsUvwMax0: {x: 0.62857145, y: 0.7105263, z: 0.9301676, w: 0}
   BoundsUvwMax1: {x: 0.62857145, y: 0.8684211, z: 0.98044693, w: 0}
   BoundsUvwMax2: {x: 0.62857145, y: 0.7105263, z: 0.8687151, w: 0}
@@ -2949,6 +3034,7 @@ MonoBehaviour:
   Highlights: 0
   Bake: 1
   PointLightShadows: 1
+  ShadowsScale: 1
   BlurShadows: 1
   AdaptiveResolution: 1
   VoxelsPerUnit: 2
@@ -3170,7 +3256,7 @@ MonoBehaviour:
   BoundsUvwMin0: {x: 0.014285714, y: 0.5, z: 0.88547486, w: 0.2857143}
   BoundsUvwMin1: {x: 0.4, y: 0.02631579, z: 0.96927375, w: 0.4736842}
   BoundsUvwMin2: {x: 0.4, y: 0.5, z: 0.76256984, w: 0.027932942}
-  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 0}
+  BoundsUvwMinOcclusion: {x: 0, y: 0, z: 0, w: 1}
   BoundsUvwMax0: {x: 0.3, y: 0.9736842, z: 0.9134078, w: 0}
   BoundsUvwMax1: {x: 0.6857143, y: 0.5, z: 0.9972067, w: 0}
   BoundsUvwMax2: {x: 0.6857143, y: 0.9736842, z: 0.7905028, w: 0}
@@ -3226,6 +3312,7 @@ MonoBehaviour:
   Highlights: 0
   Bake: 1
   PointLightShadows: 1
+  ShadowsScale: 1
   BlurShadows: 1
   AdaptiveResolution: 1
   VoxelsPerUnit: 10
