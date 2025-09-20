@@ -49,6 +49,8 @@ namespace VRCLightVolumes {
         public float DilationBackfaceBias = 0.1f;
         [Tooltip("Automatically fixes Bakery's \"burned\" light probes after a scene bake. But decreases their contrast slightly.")]
         public bool FixLightProbesL1 = true;
+        [Tooltip("Downscales each light volume. Useful to make a lower atlas resolution for mobile platforms or to increase overall sharpness and decrease aliasing.")]
+        public Downscale DownscaleVolumes = Downscale.None;
         [Header("Visuals")]
         [Tooltip("When enabled, areas outside Light Volumes fall back to light probes. Otherwise, the Light Volume with the smallest weight is used as fallback. It also improves performance.")]
         public bool LightProbesBlending = true;
@@ -61,8 +63,6 @@ namespace VRCLightVolumes {
         [Header("Debug")]
         [Tooltip("Removes all Light Volume scripts in play mode, except Udon components. Useful for testing in a clean setup, just like in VRChat. For example, Auto Update Volumes and Dynamic Light Volumes will work just like in VRChat.")]
         public bool DestroyInPlayMode = false;
-        [Tooltip("Downscales each light volume. Useful to make a lower atlas resolution for mobile platforms or to increase overall sharpness and decrease aliasing.")]
-        public Downscale DownscaleVolumes = Downscale.None;
 
         [SerializeField] public List<LightVolumeData> LightVolumeDataList = new List<LightVolumeData>();
 
