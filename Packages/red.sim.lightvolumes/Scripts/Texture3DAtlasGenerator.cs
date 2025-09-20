@@ -63,7 +63,7 @@ namespace VRCLightVolumes {
                         tex1 = LVUtils.DownscaleTexture3D(tex1);
                         tex2 = LVUtils.DownscaleTexture3D(tex2);
                         texS = LVUtils.DownscaleTexture3D(texS);
-                        yield break;
+                        yield return null;
                     }
 
                     textures[i * 4] = tex0;
