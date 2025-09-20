@@ -10,7 +10,7 @@ namespace VRCLightVolumes {
     [ExecuteAlways]
     public class PointLightVolume : MonoBehaviour {
 
-        [Tooltip("Defines whether this point light volume can be moved in runtime. Disabling this option slightly improves performance.")]
+        [Tooltip("Defines whether this point light volume can be moved in runtime. Disabling this option slightly improves performance. Don't forget to enable \"Auto Update Volumes\" in your Light Volumes Setup to have this dynamic updates!")]
         public bool Dynamic = false;
         [Tooltip("Enables baked shadows for this light. This setting is only available for static lights, which cannot move. You must re-bake your volumes after changing this setting. This incurs some runtime VRAM and performance overhead.")]
         public bool BakedShadows = false;

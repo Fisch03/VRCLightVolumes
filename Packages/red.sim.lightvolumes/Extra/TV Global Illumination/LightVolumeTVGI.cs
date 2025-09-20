@@ -44,6 +44,7 @@ namespace VRCLightVolumes {
             _downsampledTex.useMipMap = true;
             _downsampledTex.autoGenerateMips = true;
             _downsampledTex.Create();
+            _pixels = new Color32[1];
         }
 
         void Update() {
@@ -52,7 +53,6 @@ namespace VRCLightVolumes {
         }
 
         public override void OnAsyncGpuReadbackComplete(VRCAsyncGPUReadbackRequest request) {
-            _pixels = new Color32[1];
             if (request.TryGetData(_pixels)) {
                 SetColor();
             }

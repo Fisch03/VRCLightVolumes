@@ -18,7 +18,7 @@ namespace VRCLightVolumes {
     public class LightVolume : MonoBehaviour {
 
         [Header("Volume Setup")]
-        [Tooltip("Defines whether this volume can be moved in runtime. Disabling this option slightly improves performance.")]
+        [Tooltip("Defines whether this volume can be moved in runtime. Disabling this option slightly improves performance. Don't forget to enable \"Auto Update Volumes\" in your Light Volumes Setup to have this dynamic updates!")]
         public bool Dynamic;
         [Tooltip("Additive volumes apply their light on top of others as an overlay. Useful for movable and togglable lights. They can also project light onto static lightmapped objects if the surface shader supports it.")]
         public bool Additive;
