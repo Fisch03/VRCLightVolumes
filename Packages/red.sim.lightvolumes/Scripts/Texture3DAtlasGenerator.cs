@@ -92,7 +92,7 @@ namespace VRCLightVolumes {
                     texs[i * 4] = result.data[0];
                     texs[i * 4 + 1] = result.data[1];
                     texs[i * 4 + 2] = result.data[2];
-                    texs[i * 4 + 3] = volumes[i].ShadowsTexture; // Occlusion texture remains unchanged
+                    texs[i * 4 + 3] = textures[i * 4 + 3]; // Occlusion texture remains unchanged
                 }
 
                 int count = texs.Length;
