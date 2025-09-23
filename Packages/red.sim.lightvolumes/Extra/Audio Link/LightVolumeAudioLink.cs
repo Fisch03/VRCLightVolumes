@@ -112,7 +112,7 @@ namespace VRCLightVolumes {
             int _count = TargetLightVolumes.Length;
             for (int i = 0; i < _count; i++) {
                 if (ColorMode != AudioLinkColor.NoChange) {
-                    TargetPointLightVolumes[i].Color = _color * alFactors;
+                    TargetLightVolumes[i].Color = _color * alFactors;
                 }
             }
 
