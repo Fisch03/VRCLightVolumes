@@ -178,27 +178,27 @@ namespace VRCLightVolumes {
 
         #endregion
 
-#if UNITY_EDITOR
-        // To make it work when changing values on UdonSharpBehaviour in editor
-        private bool _prevAutoUpdateVolumes = false;
-        private void Update() {
-            if (_prevAutoUpdateVolumes != AutoUpdateVolumes) {
-                _prevAutoUpdateVolumes = AutoUpdateVolumes;
-                if (AutoUpdateVolumes) {
-                    RequestUpdateVolumes();
-                }
-            }
-        }
-#endif
+        private bool _old_AutoUpdateVolumes = false;
 
 #if UDONSHARP
         // Works only when changing values directly on UdonBehaviour
         // Low level Udon hacks:
         // _old_(Name) variables are the old values of the variables.
         // _onVarChange_(Name) methods (events) are called when the variable changes.
-        private bool _old_AutoUpdateVolumes;
         public void _onVarChange_AutoUpdateVolumes() {
             if (!_old_AutoUpdateVolumes && AutoUpdateVolumes) RequestUpdateVolumes();
+        }
+#endif
+
+#if !UDONSHARP || UNITY_EDITOR
+        // To make it work when changing values on UdonSharpBehaviour in editor
+        private void Update() {
+            if (_old_AutoUpdateVolumes != AutoUpdateVolumes) {
+                _old_AutoUpdateVolumes = AutoUpdateVolumes;
+                if (AutoUpdateVolumes) {
+                    RequestUpdateVolumes();
+                }
+            }
         }
 #endif
 
@@ -229,6 +229,7 @@ namespace VRCLightVolumes {
             for (int i = 0; i < count; i++) {
                 if (LightVolumeInstances[i] == null) {
                     LightVolumeInstances[i] = lightVolume;
+                    lightVolume.LightVolumeManager = this;
                     lightVolume.IsInitialized = true;
                     return;
                 }
@@ -238,6 +239,7 @@ namespace VRCLightVolumes {
             Array.Copy(LightVolumeInstances, targetArray, count);
             targetArray[count] = lightVolume;
             lightVolume.IsInitialized = true;
+            lightVolume.LightVolumeManager = this;
             LightVolumeInstances = targetArray;
         }
         public void InitializePointLightVolume(PointLightVolumeInstance pointLightVolume) {
@@ -246,6 +248,7 @@ namespace VRCLightVolumes {
             for (int i = 0; i < count; i++) {
                 if (PointLightVolumeInstances[i] == null) {
                     PointLightVolumeInstances[i] = pointLightVolume;
+                    pointLightVolume.LightVolumeManager = this;
                     pointLightVolume.IsInitialized = true;
                     return;
                 }
@@ -255,6 +258,7 @@ namespace VRCLightVolumes {
             Array.Copy(PointLightVolumeInstances, targetArray, count);
             targetArray[count] = pointLightVolume;
             pointLightVolume.IsInitialized = true;
+            pointLightVolume.LightVolumeManager = this;
             PointLightVolumeInstances = targetArray;
         }
 
@@ -315,11 +319,11 @@ namespace VRCLightVolumes {
                 if (instance == null) continue;
                 if (instance.gameObject.activeInHierarchy && instance.Intensity != 0 && instance.Color != Color.black && !instance.IsIterartedThrough) {
 #if UDONSHARP
-#if COMPILER_UDONSHARP
+    #if COMPILER_UDONSHARP
                     if (instance.IsDynamic) instance.UpdateTransform();
-#else
+    #else
                     instance.UpdateTransform();
-#endif
+    #endif
 #else
                     if (Application.isPlaying) {
                         if (instance.IsDynamic) instance.UpdateTransform();
@@ -406,11 +410,11 @@ namespace VRCLightVolumes {
                 }
                 if (instance.gameObject.activeInHierarchy && instance.Intensity != 0 && instance.Color != Color.black && !instance.IsIterartedThrough) {
 #if UDONSHARP
-#if COMPILER_UDONSHARP
+    #if COMPILER_UDONSHARP
                     if (instance.IsDynamic) instance.UpdateTransform();
-#else
+    #else
                     instance.UpdateTransform();
-#endif
+    #endif
 #else
                     if (Application.isPlaying) {
                         if (instance.IsDynamic) instance.UpdateTransform();

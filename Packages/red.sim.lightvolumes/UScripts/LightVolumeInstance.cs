@@ -61,54 +61,60 @@ namespace VRCLightVolumes {
 
         [HideInInspector] // Sets to true by the manager to check if we already iterated through this light. Prevents adding the same lights to the array muntiple times.
         public bool IsIterartedThrough = false;
+        
+        private Color _old_Color = Color.white;
+        private float _old_Intensity = 1f;
 
 #if UDONSHARP
         // Low level Udon hacks:
         // _old_(Name) variables are the old values of the variables.
         // _onVarChange_(Name) methods (events) are called when the variable changes.
-
-        private Color _old_Color;
+        // Without udon it should be chacked in update
         public void _onVarChange_Color() {
-            if (_old_Color != Color && Utilities.IsValid(LightVolumeManager))
-                LightVolumeManager.RequestUpdateVolumes();
+            if (_old_Color != Color)
+                RequestUpdateVolumes();
         }
-
-        private float _old_Intensity;
         public void _onVarChange_Intensity() {
-            if (_old_Intensity != Intensity && Utilities.IsValid(LightVolumeManager))
-                LightVolumeManager.RequestUpdateVolumes();
+            if (_old_Intensity != Intensity)
+                RequestUpdateVolumes();
         }
 #endif
+
+#if !UDONSHARP || UNITY_EDITOR
+        // To make it work when changing values on UdonSharpBehaviour in editor
+        private void Update() { 
+            if (_old_Color != Color || _old_Intensity != Intensity) {
+                _old_Color = Color;
+                _old_Intensity = Intensity;
+                RequestUpdateVolumes();
+            }
+        }
+#endif
+
+        private void Start() {
+#if !UDONSHARP
+            if (LightVolumeManager == null) {
+                LightVolumeManager = FindObjectOfType<LightVolumeManager>();
+            }
+#endif
+            if (!IsInitialized && LightVolumeManager != null) {
+                LightVolumeManager.InitializeLightVolume(this);
+            }
+        }
 
         private void OnEnable() {
-#if UDONSHARP
-            SendCustomEventDelayedFrames(nameof(DelayInitialize), 0);
-#endif
-#if UDONSHARP
-            if (Utilities.IsValid(LightVolumeManager))
-#else
-            if (LightVolumeManager != null)
-#endif
-                LightVolumeManager.RequestUpdateVolumes();
+            RequestUpdateVolumes();
         }
 
         private void OnDisable() {
-#if UDONSHARP
-            if (Utilities.IsValid(LightVolumeManager))
-#else
-            if (LightVolumeManager != null)
-#endif
-                LightVolumeManager.RequestUpdateVolumes();
+            RequestUpdateVolumes();
         }
 
         // Calculates and sets invLocalEdgeBlending
         public void SetSmoothBlending(float radius) {
             Vector3 scl = transform.lossyScale;
             InvLocalEdgeSmoothing = scl / Mathf.Max(radius, 0.00001f);
-
-#if COMPILER_UDONSHARP
-            if (Utilities.IsValid(LightVolumeManager)) LightVolumeManager.RequestUpdateVolumes();
-#endif
+            RequestUpdateVolumes();
         }
 
         // Recalculates inv TRS matrix and Relative L1 rotation
@@ -130,26 +136,13 @@ namespace VRCLightVolumes {
             RelativeRotation = new Vector4(rot.x, rot.y, rot.z, rot.w);
         }
 
-#if !UDONSHARP || UNITY_EDITOR
-        // To make it work when changing values on UdonSharpBehaviour in editor
-        private Color _prevColor = Color.white;
-        private float _prevIntensity = 1f;
-        private void Update() {
-#if !UDONSHARP
-            DelayInitialize();
+        private void RequestUpdateVolumes() {
+#if COMPILER_UDONSHARP
+            if (Utilities.IsValid(LightVolumeManager)) 
+#else
+            if (LightVolumeManager != null)
 #endif
-            if(_prevColor != Color || _prevIntensity != Intensity) {
-                _prevColor = Color;
-                _prevIntensity = Intensity;
                 LightVolumeManager.RequestUpdateVolumes();
-            }
-        }
-#endif
-
-        public void DelayInitialize() {
-            if (!IsInitialized && LightVolumeManager != null) {
-                LightVolumeManager.InitializeLightVolume(this);
-            }
         }
 
     }

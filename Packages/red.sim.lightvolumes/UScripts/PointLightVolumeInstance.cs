@@ -49,52 +49,50 @@ namespace VRCLightVolumes {
         private Quaternion _prevRotation = Quaternion.identity;
         private Vector3 _prevScale = Vector3.one;
 
-#if UNITY_EDITOR
-        // To make it work when changing values on UdonSharpBehaviour in editor
-        private Color _prevColor = Color.white;
-        private float _prevIntensity = 1;
-        private void Update() {
-            if (_prevColor != Color || _prevIntensity != Intensity) {
-                _prevColor = Color;
-                _prevIntensity = Intensity;
-                LightVolumeManager.RequestUpdateVolumes();
-            }
-        }
-#endif
+        private Color _old_Color = Color.white;
+        private float _old_Intensity = 1;
 
 #if UDONSHARP
         // Works only when changing values directly on UdonBehaviour
         // Low level Udon hacks:
         // _old_(Name) variables are the old values of the variables.
         // _onVarChange_(Name) methods (events) are called when the variable changes.
-
-        private Color _old_Color;
         public void _onVarChange_Color() {
             if (_old_Color != Color) MarkRangeDirtyAndRequestUpdate();
         }
-
-        private float _old_Intensity;
         public void _onVarChange_Intensity() {
             if (_old_Intensity != Intensity) MarkRangeDirtyAndRequestUpdate();
         }
 #endif
 
-        private void OnEnable() {
-#if UDONSHARP
-            if (Utilities.IsValid(LightVolumeManager))
-#else
-            if (LightVolumeManager != null)
+#if !UDONSHARP || UNITY_EDITOR
+        // To make it work when changing values on UdonSharpBehaviour in editor
+        private void Update() {
+            if (_old_Color != Color || _old_Intensity != Intensity) {
+                _old_Color = Color;
+                _old_Intensity = Intensity;
+                RquestUpdateVolumes();
+            }
+        }
 #endif
-                LightVolumeManager.RequestUpdateVolumes();
+
+        private void Start() {
+#if !UDONSHARP
+            if (LightVolumeManager == null) {
+                LightVolumeManager = FindObjectOfType<LightVolumeManager>();
+            }
+#endif
+            if (!IsInitialized && LightVolumeManager != null) {
+                LightVolumeManager.InitializePointLightVolume(this);
+            }
+        }
+
+        private void OnEnable() {
+            RquestUpdateVolumes();
         }
 
         private void OnDisable() {
-#if UDONSHARP
-            if (Utilities.IsValid(LightVolumeManager))
-#else
-            if (LightVolumeManager != null)
-#endif
-                LightVolumeManager.RequestUpdateVolumes();
+            RquestUpdateVolumes();
         }
 
         // Checks if it's a spotlight
@@ -212,9 +210,7 @@ namespace VRCLightVolumes {
 
         private void MarkRangeDirtyAndRequestUpdate() {
             IsRangeDirty = true;
-#if COMPILER_UDONSHARP
-            if (Utilities.IsValid(LightVolumeManager)) LightVolumeManager.RequestUpdateVolumes();
-#endif
+            RquestUpdateVolumes();
         }
 
         // Updates data required for shader
@@ -304,10 +300,13 @@ namespace VRCLightVolumes {
             return Mathf.Max(Mathf.PI * 2 * L * Mathf.Abs(intensity) / (cutoff * cutoff) - 1, 0) * sqSize;
         }
 
-        private void Start() {
-            if (!IsInitialized && LightVolumeManager != null) {
-                LightVolumeManager.InitializePointLightVolume(this);
-            }
+        private void RquestUpdateVolumes() {
+#if COMPILER_UDONSHARP
+            if (Utilities.IsValid(LightVolumeManager)) 
+#else
+            if (LightVolumeManager != null)
+#endif
+                LightVolumeManager.RequestUpdateVolumes();
         }
 
     }
