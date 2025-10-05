@@ -322,14 +322,12 @@ namespace VRCLightVolumes {
                 LVUtils.Apply3DTextureData(atlasTexture, atlasPixels);
 
                 yield return null;
-#if UNITY_EDITOR
-                Progress.Finish(progressId);
-#endif
 
                 onComplete?.Invoke(new Atlas3D { Texture = atlasTexture, BoundsUvwMin = boundsMin, BoundsUvwMax = boundsMax });
 
             } finally {
 #if UNITY_EDITOR
+                Progress.Finish(progressId);
                 Progress.Remove(progressId);
                 // Clear temporary 3D textures
                 if (texs != null) {

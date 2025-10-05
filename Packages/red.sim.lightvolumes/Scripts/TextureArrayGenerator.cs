@@ -82,15 +82,12 @@ namespace VRCLightVolumes {
                 }
                 array.Apply(false);
 
-#if UNITY_EDITOR
-                Progress.Finish(progressId);
-#endif
-
                 onComplete?.Invoke(array, uniqueIDs);
 
             } finally {
 
 #if UNITY_EDITOR
+                Progress.Finish(progressId);
                 Progress.Remove(progressId);
 #endif
                 // Release and destroy the textures
