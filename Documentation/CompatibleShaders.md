@@ -18,6 +18,7 @@
 | [Mochies Unity Shaders](https://github.com/MochiesCode/Mochies-Unity-Shaders) | A collection of shaders including a highly customizable toon shader, a standard shader replacement, particle shader, water shader, glass shader, and screenspace effect shader. |     v1.62.3     |
 | [Unity Baked Volumetrics - Fork by Ikeiwa](https://github.com/Ikeiwa/Unity-Baked-Volumetrics) | Volumetric Fog shader that supports Light Volumes. A for of original [Unity Baked Volumetrics](https://github.com/frostbone25/Unity-Baked-Volumetrics) |        -        |
 | [Unity Shaders Plus](https://github.com/ShingenPizza/UnityShadersPlus/) | Unity's built-in shaders, some of them edited to add some minor features, while keeping compatibility with those standard shaders that people are commonly using already. |       v3        |
+| [GeneLit by Momoma](https://github.com/momoma-null/GeneLit)  | Physically based rendering (PBR) shaders for Unity derived from [Filament shaders](https://github.com/google/filament). More beautiful and accurate rendering than Unity Standard shaders. |     v.1.0.8     |
 | [Cottonfox Fur Shader](https://github.com/jamestruhlar/cottonfoxfur/) | A fur shader that supports Light Volumes.                     |        -        |
 | [Orels Unity Shaders (Toon and PBR)](https://github.com/orels1/orels-Unity-Shaders/tree/dev) | Really good and performant PBR Shaders. (To access it you will need to enable "Show Pre-Release Packages" in VCC Settings) |     v7.0.0 Dev 23     |
 | [Moriohs Toon Shader](https://gitlab.com/xMorioh/moriohs-toon-shader) | Toon/Master Shader that not just correctly respects the entirety of Unity's Lighting System in a NPR Workflow but would also include several PBR approaches for different features. |     v.2.1.0     |
@@ -30,7 +31,6 @@
 
 | Shader Name                                                  | Description                                                  | Supported since |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | :-------------: |
-| [GeneLit by Momoma](https://github.com/momoma-null/GeneLit)  | Physically based rendering (PBR) shaders for Unity derived from [Filament shaders](https://github.com/google/filament). More beautiful and accurate rendering than Unity Standard shaders. |     v.1.0.7     |
 | [ACLS Shader](https://aciil.booth.pm/items/1779615)          | Designed to match or fallback against the randomness of VRCHAT user generated maps. Its aware how world lighting works and what most typical problems are. Nearly all aspects of lighting context and using it as materials can be controlled for Toony or Realistic styles (NPR/PBR). |    v.3.50.5     |
 
 *More shaders yet to be added and upgraded to v.2.0.0. Stay tuned!*
