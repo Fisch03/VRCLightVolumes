@@ -45,6 +45,10 @@ namespace VRCLightVolumes {
         [Space]
         [Tooltip("Auto uses Theme Colors 0, 1, 2, 3 for Bass, LowMid, HighMid, Treble. Override Color allows you to set the static color value")]
         public AudioLinkColor ColorMode = AudioLinkColor.Auto;
+
+        [Tooltip("Makes color full saturated and full bright before applying Audio Link effect. AudioLink already affects auto theme colors in runtime for some reason, so it prevents doubling the animation, which is especially visible when using Delay")]
+        public bool NormalizeColors = true;
+
         [Tooltip("Color that will be used when Override Color is enabled")]
         [ColorUsage(showAlpha: false)] public Color Color = Color.white;
 
@@ -144,8 +148,12 @@ namespace VRCLightVolumes {
 
         // Gets color with max brightness and saturation. Applies on top of the color chord color because AL dims the brightness of this color by dafault, which makes it no sense to use with smoothing, delayed effects, etc.
         private Color NormalizeColor(Color color) {
-            Color.RGBToHSV(color, out float h, out float s, out float v);
-            return Color.HSVToRGB(h, 1f, 1f);
+            if (NormalizeColors) {
+                Color.RGBToHSV(color, out float h, out float s, out float v);
+                return Color.HSVToRGB(h, 1f, 1f);
+            } else {
+                return color;
+            }
         }
 
         private float ApplyALFactors(float alData) {
