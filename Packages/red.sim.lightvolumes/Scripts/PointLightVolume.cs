@@ -218,10 +218,7 @@ namespace VRCLightVolumes {
                 PointLightVolumeInstance.Color = Color;
                 PointLightVolumeInstance.Intensity = Intensity;
                 PointLightVolumeInstance.IsRangeDirty = true;
-#if UNITY_EDITOR
-                // Mark changes to ensure prefab modifications are recorded
-                LVUtils.MarkDirty(PointLightVolumeInstance);
-#endif
+
                 if (Type == LightType.PointLight) { // Point light
                     if (Shape == LightShape.Custom && Cubemap != null) {
                         PointLightVolumeInstance.SetLightSourceSize(LightSourceSize);
@@ -253,6 +250,12 @@ namespace VRCLightVolumes {
                     PointLightVolumeInstance.SetAreaLight();
                     PointLightVolumeInstance.UpdateRotation();
                 }
+
+#if UNITY_EDITOR
+                // Mark changes to ensure prefab modifications are recorded
+                LVUtils.MarkDirty(PointLightVolumeInstance);
+#endif
+
 #if UDONSHARP
             }
 #endif

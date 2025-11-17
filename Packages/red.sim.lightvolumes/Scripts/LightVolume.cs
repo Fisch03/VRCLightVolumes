@@ -581,6 +581,12 @@ namespace VRCLightVolumes {
                 LightVolumeInstance.Color = Color;
                 LightVolumeInstance.Intensity = Intensity;
                 LightVolumeInstance.SetSmoothBlending(SmoothBlending);
+
+#if UNITY_EDITOR
+                // Mark changes to ensure prefab modifications are recorded
+                LVUtils.MarkDirty(LightVolumeInstance);
+#endif
+
 #if UDONSHARP
             }
 #endif
