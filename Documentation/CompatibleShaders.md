@@ -25,15 +25,11 @@
 | [RealToon (Pro Anime/Toon Shader)](https://assetstore.unity.com/packages/vfx/shaders/realtoon-pro-anime-toon-shader-65518?aid=1100lwff7) | An Pro/Advance Anime/Toon Shader to make your characters & objects to look as close to real Anime/Cartoon. Other Stylized look are also possible. (For Games, Film/Animations & Illustrations/Arts) |    v.5.0.13     |
 | [Quantum Shader](https://github.com/SaphiBlue/quantumshader) | A shader pack made with ASE (Amplify Shader Editor) with Unity like PBR options and custom audiolink. | Jul 24, 2025 |
 | [Warren's Fast Fur Shader](https://warrenwolfy.gumroad.com/l/atntv) | A heavily speed-optimized fur shader. Supports both per-pixel and per-vertex Light Volumes, with anisotropic highlighting for the hairs. |        v5.1.0        |
+| [ACLS Shader](https://aciil.booth.pm/items/1779615)          | Designed to match or fallback against the randomness of VRCHAT user generated maps. Its aware how world lighting works and what most typical problems are. Nearly all aspects of lighting context and using it as materials can be controlled for Toony or Realistic styles (NPR/PBR). |    v.2.31     |
+| [The Gaze Shader](https://github.com/lunabxgg/The-Gaze-Shader)          | A 2D animation rendering and gaze-tracking system tailored for Unity and VRChat creators. It not only enables your GIFs or Sprite Sheets to play vividly in 3D space but also automatically tracks the player's perspective, creating an interactive sensation of "being watched." |    v1.0     |
 
 
-## Light Volumes v.1.0.0 compatible
-
-| Shader Name                                                  | Description                                                  | Supported since |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | :-------------: |
-| [ACLS Shader](https://aciil.booth.pm/items/1779615)          | Designed to match or fallback against the randomness of VRCHAT user generated maps. Its aware how world lighting works and what most typical problems are. Nearly all aspects of lighting context and using it as materials can be controlled for Toony or Realistic styles (NPR/PBR). |    v.3.50.5     |
-
-*More shaders yet to be added and upgraded to v.2.0.0. Stay tuned!*
+*More shaders yet to be added. Stay tuned!*
 
 Contact me in Discord if you want your shader to be added in this list.
 Discord: @RED_SIM
