@@ -27,6 +27,7 @@
 | [Warren's Fast Fur Shader](https://warrenwolfy.gumroad.com/l/atntv) | A heavily speed-optimized fur shader. Supports both per-pixel and per-vertex Light Volumes, with anisotropic highlighting for the hairs. |        v5.1.0        |
 | [ACLS Shader](https://aciil.booth.pm/items/1779615)          | Designed to match or fallback against the randomness of VRCHAT user generated maps. Its aware how world lighting works and what most typical problems are. Nearly all aspects of lighting context and using it as materials can be controlled for Toony or Realistic styles (NPR/PBR). |    v.2.31     |
 | [The Gaze Shader](https://github.com/lunabxgg/The-Gaze-Shader)          | A 2D animation rendering and gaze-tracking system tailored for Unity and VRChat creators. It not only enables your GIFs or Sprite Sheets to play vividly in 3D space but also automatically tracks the player's perspective, creating an interactive sensation of "being watched." |    v1.0     |
+| [Xiexe's Unity Shaders](https://github.com/Xiexe/Xiexes-Unity-Shaders)          | Xiexe's Unity Shaders is a set of shaders for Unity that aim to strike a mix between user desired looks and respecting the environment's lighting. It supports both NPR and PBR workflows, as well as a host of features for tweaking each. |    v3.7.0     |
 
 
 *More shaders yet to be added. Stay tuned!*
