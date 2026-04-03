@@ -17,6 +17,8 @@ namespace VRCLightVolumes {
         [ColorUsage(showAlpha: false)] public Color Color = Color.white;
         [Tooltip("Color multiplies by this value.")]
         public float Intensity = 1;
+        [Tooltip("Scuffed Blending Weight for blending between two overlapping volumes.")]
+        [Range(0f, 1f)] public float BlendWeight = 1f;
         [Tooltip("Defines whether this volume can be moved in runtime. Disabling this option slightly improves performance. You can even change it in runtime. Don't forget to enable \"Auto Update Volumes\" in your Light Volumes Setup to have this dynamic updates!")]
         public bool IsDynamic = false;
         [Tooltip("Additive volumes apply their light on top of others as an overlay. Useful for movable lights like flashlights, projectors, disco balls, etc. They can also project light onto static lightmapped objects if the surface shader supports it.")]
@@ -64,6 +66,7 @@ namespace VRCLightVolumes {
         
         private Color _old_Color = Color.white;
         private float _old_Intensity = 1f;
+        private float _old_BlendWeight = 1f;
 
 #if UDONSHARP
         // Low level Udon hacks:
@@ -78,14 +81,19 @@ namespace VRCLightVolumes {
             if (_old_Intensity != Intensity)
                 RequestUpdateVolumes();
         }
+        public void _onVarChange_BlendWeight() {
+            if (_old_BlendWeight != BlendWeight)
+                RequestUpdateVolumes();
+        }
 #endif
 
 #if !UDONSHARP || UNITY_EDITOR
         // To make it work when changing values on UdonSharpBehaviour in editor
         private void Update() { 
-            if (_old_Color != Color || _old_Intensity != Intensity) {
+            if (_old_Color != Color || _old_Intensity != Intensity || _old_BlendWeight != BlendWeight) {
                 _old_Color = Color;
                 _old_Intensity = Intensity;
+                _old_BlendWeight = BlendWeight;
                 RequestUpdateVolumes();
             }
         }

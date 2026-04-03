@@ -29,6 +29,8 @@ namespace VRCLightVolumes {
         public float Intensity = 1f;
         [Tooltip("Size in meters of this Light Volume's overlapping regions for smooth blending with other volumes.")]
         [Range(0, 1)] public float SmoothBlending = 0.25f;
+        [Tooltip("Scuffed Blending Weight for blending between two overlapping volumes.")]
+        [Range(0, 1)] public float BlendWeight = 1f;
 
         [Header("Baked Data")]
         [Tooltip("Texture3D with baked SH data required for future atlas packing. It won't be uploaded to VRChat. (L0r, L0g, L0b, L1r.z)")]
@@ -571,6 +573,7 @@ namespace VRCLightVolumes {
                 // We can first set these parameters and then exetute a parameterless method.
                 _lightVolumeBehaviour.SetProgramVariable("__0_radius__param", SmoothBlending);
                 _lightVolumeBehaviour.SendCustomEvent("__0_SetSmoothBlending");
+                _lightVolumeBehaviour.SetProgramVariable("BlendWeight", BlendWeight);
             } else {
 #endif
                 LightVolumeInstance.IsInitialized = true; // Always override to true in editor with no play mode!
@@ -581,6 +584,7 @@ namespace VRCLightVolumes {
                 LightVolumeInstance.Color = Color;
                 LightVolumeInstance.Intensity = Intensity;
                 LightVolumeInstance.SetSmoothBlending(SmoothBlending);
+                LightVolumeInstance.BlendWeight = BlendWeight;
 
 #if UNITY_EDITOR
                 // Mark changes to ensure prefab modifications are recorded

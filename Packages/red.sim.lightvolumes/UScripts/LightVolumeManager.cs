@@ -371,7 +371,23 @@ namespace VRCLightVolumes {
 
                 // Setting volume transform
                 _invWorldMatrix[i] = instance.InvWorldMatrix;
-                _invLocalEdgeSmooth[i] = instance.InvLocalEdgeSmoothing; // Setting volume edge smoothing
+
+                // Really awesome blending logic
+                float bw = Mathf.Clamp01(instance.BlendWeight);
+                Vector4 invSmooth = instance.InvLocalEdgeSmoothing;
+                if (bw > 0.1f) {
+                    float t = (bw - 0.1f) / 0.9f;
+                    t = t * t * t;
+                    _invLocalEdgeSmooth[i] = new Vector4(
+                        Mathf.Lerp(Mathf.Min(2.0f, invSmooth.x), invSmooth.x, t),
+                        Mathf.Lerp(Mathf.Min(2.0f, invSmooth.y), invSmooth.y, t),
+                        Mathf.Lerp(Mathf.Min(2.0f, invSmooth.z), invSmooth.z, t),
+                        invSmooth.w);
+                } else {
+                    float bw_scaled = bw / 0.1f;
+                    float s = 2.0f * Mathf.Pow(Mathf.Max(bw_scaled, 0.0001f), 1f / 4f);
+                    _invLocalEdgeSmooth[i] = new Vector4(s, s, s, invSmooth.w);
+                }
 
                 Vector4 c = instance.Color.linear * instance.Intensity; // Changing volume color
                 c.w = instance.IsRotated ? 1 : 0; // Color alpha stores if volume rotated or not

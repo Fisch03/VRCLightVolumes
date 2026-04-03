@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: LightVolumeManager
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: ff45af10e88d1f64a8e0aa5027717e8b, type: 2}
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 2f34b17ac11f7de4bb30bc712b2740d8,
+    type: 2}
   udonAssembly: 
   assemblyError: 
   sourceCsScript: {fileID: 11500000, guid: a4c164fbf42cf794a8edc0fd006e1b60, type: 3}

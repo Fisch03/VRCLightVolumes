@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: LightVolumeTVGI
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 0d128265897c96949a2bb17f1a2decae, type: 2}
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 7f5d605bd49fc8f4c91aca1d1ead9b7d,
+    type: 2}
   udonAssembly: 
   assemblyError: 
   sourceCsScript: {fileID: 11500000, guid: a050acdc976b3f8438922b3f664e5233, type: 3}
